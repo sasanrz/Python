@@ -1,0 +1,107 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+This code Find the word for example CAT in matrix in 8 directions.
+
+@author: sasan
+"""
+
+import numpy as np
+
+
+# use pandas to extract rainfall inches as a NumPy array
+counter=0
+#input data
+
+InputData=np.array([["C","A","T","F","G","H","C","T"],
+           ["$","A","T","C","A","T","a","A"],
+           ["1","A","T","F","G","c","C","A"],
+           ["C","A","T","F","G","H","C","A"],
+           ["a","t","T","F","C","H","C","A"],
+           ["t","t","T","F","T","A","C","A"],
+           ["a","C","a","a","t","H","t","A"],
+           ["C","A","T","c","G","C","A","T"]])
+
+
+#input the word that you want to search
+Word=np.array(["C","A","T"])
+
+#horizontally search
+def findVer(word,Inputdata):
+    Wdim=word.shape[0]
+    Trawdim=Inputdata.shape[0]#Table raw Dim.
+    Tcoldim=Inputdata.shape[1]#Table col. Dim.
+    count=0#counter
+    i=0
+    j=0
+    k=0
+    for i in range(Trawdim):
+        
+        for j in range(Tcoldim-Wdim+1):
+                      l=0
+                      for k in range(Wdim):
+                          if (word[k].lower()==Inputdata[i,j+k].lower()):
+                              l+=1
+                          else: 
+                              break    
+                      if    l==Wdim :
+                         count+=1
+    return count
+#diagonaly seach
+def finddiag(word,Inputdata):
+    Wdim=word.shape[0]
+    Trawdim=Inputdata.shape[0]#Table raw Dim.
+    Tcoldim=Inputdata.shape[1]#Table col. Dim.
+    count=0#counter
+    i=0
+    j=0
+    k=0
+    for i in range(Trawdim-Wdim+1):
+        
+        for j in range(Tcoldim-Wdim+1):
+                      l=0
+                      for k in range(Wdim):
+                          if (word[k].lower()==Inputdata[i+k,j+k].lower()):
+                             l+=1
+                          else: 
+                              break    
+                      if    l==Wdim :
+                         count+=1
+    return count
+
+
+ #Left to right 
+counter+=findVer(Word,InputData)
+
+ #right to left
+temp=np.fliplr(InputData)
+counter+=findVer(Word,temp) 
+ 
+ #up to down 
+temp=np.transpose(InputData)
+counter+=findVer(Word,temp) 
+
+#down to up
+temp=np.fliplr(temp)
+counter+=findVer(Word,temp)
+
+#Left to right diagonaly
+counter+=finddiag(Word,InputData)
+
+ # Right to left diagonaly
+temp=np.fliplr(InputData)
+counter+=finddiag(Word,temp)  
+
+ #down to up Left to right diagonaly
+temp=InputData[::-1]
+counter+=finddiag(Word,temp) 
+
+ #down to up right to left
+temp=np.fliplr(temp) 
+counter+=finddiag(Word,temp) 
+   
+print("Result=",counter)
+  
+ 
+    
+    
